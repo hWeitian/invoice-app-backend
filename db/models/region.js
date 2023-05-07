@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 
-const initProduct = (sequelize) =>
+const initRegion = (sequelize) =>
   sequelize.define(
-    "product",
+    "region",
     {
       id: {
         allowNull: false,
@@ -12,10 +12,6 @@ const initProduct = (sequelize) =>
       },
       name: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      cost: {
-        type: DataTypes.DECIMAL,
         allowNull: false,
       },
       createdAt: {
@@ -30,8 +26,8 @@ const initProduct = (sequelize) =>
     {
       sequelize,
       underscored: true,
-      modelName: "product",
+      modelName: "region",
     }
   );
 
-module.exports = initProduct;
+module.exports = initRegion;

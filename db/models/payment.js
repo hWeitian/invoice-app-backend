@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 
-const initProduct = (sequelize) =>
+const initPayment = (sequelize) =>
   sequelize.define(
-    "product",
+    "payment",
     {
       id: {
         allowNull: false,
@@ -10,11 +10,15 @@ const initProduct = (sequelize) =>
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      name: {
+      payee: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      cost: {
+      paymentDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      amount: {
         type: DataTypes.DECIMAL,
         allowNull: false,
       },
@@ -30,8 +34,8 @@ const initProduct = (sequelize) =>
     {
       sequelize,
       underscored: true,
-      modelName: "product",
+      modelName: "payment",
     }
   );
 
-module.exports = initProduct;
+module.exports = initPayment;

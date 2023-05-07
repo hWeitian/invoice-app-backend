@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 
-const initCreditNote = (sequelize) =>
+const initOrder = (sequelize) =>
   sequelize.define(
-    "credit_note",
+    "order",
     {
       id: {
         allowNull: false,
@@ -10,37 +10,56 @@ const initCreditNote = (sequelize) =>
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      creditNoteDate: {
-        type: DataTypes.DATE,
+      magazineId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "magazines",
+          key: "id",
+        },
+      },
+      productId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "products",
+          key: "id",
+        },
+      },
+      colour: {
+        type: DataTypes.STRING,
+      },
+      position: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      pages: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      salesNote: {
+        type: DataTypes.TEXT,
+      },
+      cost: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+      },
+      insertionOrderId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "insertion_orders",
+          key: "id",
+        },
       },
       invoiceId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: "invoices",
           key: "id",
         },
       },
-      netAmount: {
-        type: DataTypes.DECIMAL,
-        allowNull: false,
-      },
-      usdGst: {
-        type: DataTypes.DECIMAL,
-        allowNull: false,
-      },
-      sgdGst: {
-        type: DataTypes.DECIMAL,
-        allowNull: false,
-      },
-      exchangeRateId: {
+      index: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: "exchange_rates",
-          key: "id",
-        },
       },
       createdAt: {
         allowNull: false,
@@ -54,8 +73,8 @@ const initCreditNote = (sequelize) =>
     {
       sequelize,
       underscored: true,
-      modelName: "credit_note",
+      modelName: "order",
     }
   );
 
-module.exports = initCreditNote;
+module.exports = initOrder;

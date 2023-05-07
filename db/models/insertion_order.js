@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 
-const initCreditNote = (sequelize) =>
+const initInsertionOrder = (sequelize) =>
   sequelize.define(
-    "credit_note",
+    "insertion_order",
     {
       id: {
         allowNull: false,
@@ -10,37 +10,43 @@ const initCreditNote = (sequelize) =>
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      creditNoteDate: {
+      number: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      invoiceId: {
+      companyId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "invoices",
+          model: "companies",
           key: "id",
         },
       },
-      netAmount: {
-        type: DataTypes.DECIMAL,
+      contactId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "contacts",
+          key: "id",
+        },
+      },
+      discount: {
+        type: DataTypes.DECIMAL,
       },
       usdGst: {
         type: DataTypes.DECIMAL,
         allowNull: false,
       },
-      sgdGst: {
+      amount: {
         type: DataTypes.DECIMAL,
         allowNull: false,
       },
-      exchangeRateId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "exchange_rates",
-          key: "id",
-        },
+      isSigned: {
+        type: DataTypes.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
@@ -54,8 +60,8 @@ const initCreditNote = (sequelize) =>
     {
       sequelize,
       underscored: true,
-      modelName: "credit_note",
+      modelName: "insertion_order",
     }
   );
 
-module.exports = initCreditNote;
+module.exports = initInsertionOrder;

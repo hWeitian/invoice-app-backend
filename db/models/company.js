@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 
-const initProduct = (sequelize) =>
+const initCompany = (sequelize) =>
   sequelize.define(
-    "product",
+    "company",
     {
       id: {
         allowNull: false,
@@ -14,8 +14,8 @@ const initProduct = (sequelize) =>
         type: DataTypes.STRING,
         allowNull: false,
       },
-      cost: {
-        type: DataTypes.DECIMAL,
+      billingAddress: {
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       createdAt: {
@@ -30,8 +30,8 @@ const initProduct = (sequelize) =>
     {
       sequelize,
       underscored: true,
-      modelName: "product",
+      modelName: "company",
     }
   );
 
-module.exports = initProduct;
+module.exports = initCompany;

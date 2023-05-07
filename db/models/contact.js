@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 
-const initCreditNote = (sequelize) =>
+const initContact = (sequelize) =>
   sequelize.define(
-    "credit_note",
+    "contact",
     {
       id: {
         allowNull: false,
@@ -10,37 +10,37 @@ const initCreditNote = (sequelize) =>
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      creditNoteDate: {
-        type: DataTypes.DATE,
+      firstName: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
-      invoiceId: {
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      designation: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      companyId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: "invoices",
+          model: "companies",
           key: "id",
         },
       },
-      netAmount: {
-        type: DataTypes.DECIMAL,
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
         allowNull: false,
-      },
-      usdGst: {
-        type: DataTypes.DECIMAL,
-        allowNull: false,
-      },
-      sgdGst: {
-        type: DataTypes.DECIMAL,
-        allowNull: false,
-      },
-      exchangeRateId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: "exchange_rates",
-          key: "id",
-        },
       },
       createdAt: {
         allowNull: false,
@@ -54,8 +54,8 @@ const initCreditNote = (sequelize) =>
     {
       sequelize,
       underscored: true,
-      modelName: "credit_note",
+      modelName: "contact",
     }
   );
 
-module.exports = initCreditNote;
+module.exports = initContact;

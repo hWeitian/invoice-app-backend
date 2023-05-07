@@ -1,26 +1,52 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class credit_item extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
+const { DataTypes } = require("sequelize");
+
+const initCreditItem = (sequelize) =>
+  sequelize.define(
+    "credit_item",
+    {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      creditNoteId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "credit_notes",
+          key: "id",
+        },
+      },
+      orderId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "orders",
+          key: "id",
+        },
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      amount: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+      },
+    },
+    {
+      sequelize,
+      underscored: true,
+      modelName: "credit_item",
     }
-  }
-  credit_item.init({
-    credit_note_id: DataTypes.INTEGER,
-    order_id: DataTypes.INTEGER,
-    description: DataTypes.TEXT,
-    amount: DataTypes.DECIMAL
-  }, {
-    sequelize,
-    modelName: 'credit_item',
-  });
-  return credit_item;
-};
+  );
+
+module.exports = initCreditItem;

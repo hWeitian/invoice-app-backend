@@ -25,11 +25,6 @@ module.exports = {
           key: "id",
         },
       },
-      invoice_num: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-      },
       invoice_date: {
         type: Sequelize.DATE,
         allowNull: false,

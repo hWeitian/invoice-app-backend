@@ -9,11 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      credit_note_num: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-      },
       credit_note_date: {
         type: Sequelize.DATE,
         allowNull: false,

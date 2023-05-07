@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 
-const initProduct = (sequelize) =>
+const initOrderRegion = (sequelize) =>
   sequelize.define(
-    "product",
+    "orderRegion",
     {
       id: {
         allowNull: false,
@@ -10,13 +10,23 @@ const initProduct = (sequelize) =>
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      name: {
-        type: DataTypes.STRING,
+      regionId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "regions",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
-      cost: {
-        type: DataTypes.DECIMAL,
+      orderId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: "orders",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,
@@ -30,8 +40,8 @@ const initProduct = (sequelize) =>
     {
       sequelize,
       underscored: true,
-      modelName: "product",
+      modelName: "orderRegion",
     }
   );
 
-module.exports = initProduct;
+module.exports = initOrderRegion;
