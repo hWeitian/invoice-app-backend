@@ -10,23 +10,25 @@ const initInsertionOrder = (sequelize) =>
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      number: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       date: {
         type: DataTypes.DATE,
         allowNull: false,
       },
       companyId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: "companies",
           key: "id",
         },
       },
       contactId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "contacts",
+          key: "id",
+        },
+      },
+      adminId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -41,12 +43,24 @@ const initInsertionOrder = (sequelize) =>
         type: DataTypes.DECIMAL,
         allowNull: false,
       },
-      amount: {
+      netAmount: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+      },
+      totalAmount: {
         type: DataTypes.DECIMAL,
         allowNull: false,
       },
       isSigned: {
         type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      isDraft: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      url: {
+        type: DataTypes.STRING,
       },
       createdAt: {
         allowNull: false,

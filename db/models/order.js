@@ -34,7 +34,6 @@ const initOrder = (sequelize) =>
       },
       pages: {
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
       salesNote: {
         type: DataTypes.TEXT,

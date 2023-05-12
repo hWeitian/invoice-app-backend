@@ -11,6 +11,42 @@ async function getAll(req, res) {
   }
 }
 
+async function insertEmptyRow(req, res) {
+  const data = req.body;
+  try {
+    const newRow = await InsertionOrder.create(data);
+    return res.json(newRow);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+async function updateRow(req, res) {
+  const { id } = req.params;
+  const data = req.body;
+  const newData = {
+    date: data.ioDate,
+    companyId: data.companies.id,
+    contactId: data.contacts.id,
+    adminId: data.adminId,
+    discount: data.discount,
+    usdGst: data.usdGst,
+    netAmount: data.netAmount,
+    totalAmount: data.totalAmount,
+    isSigned: false,
+    isDraft: false,
+    url: data.url,
+  };
+  try {
+    const newRow = await InsertionOrder.update(newData, { where: { id: id } });
+    return res.json(newRow);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
+  insertEmptyRow,
+  updateRow,
 };

@@ -5,6 +5,7 @@ const companies = require("../controllers/company");
 const router = express.Router();
 
 router.get("/", companies.getAll);
+router.get("/names", companies.getAllNames);
 router.get("/:id", companies.getOne);
 
 module.exports = router;

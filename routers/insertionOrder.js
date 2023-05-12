@@ -6,4 +6,10 @@ const router = express.Router();
 
 router.get("/", insertionOrders.getAll);
 
+// Insert an empty row to get insertion order number
+router.post("/", insertionOrders.insertEmptyRow);
+
+// Update a record
+router.put("/:id", insertionOrders.updateRow);
+
 module.exports = router;

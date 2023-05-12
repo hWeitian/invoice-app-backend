@@ -42,6 +42,9 @@ const initCreditNote = (sequelize) =>
           key: "id",
         },
       },
+      url: {
+        type: DataTypes.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

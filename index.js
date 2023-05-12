@@ -21,6 +21,7 @@ const invoiceRouter = require("./routers/invoice");
 const orderRouter = require("./routers/order");
 const creditNoteRouter = require("./routers/creditNote");
 const creditItemRouter = require("./routers/creditItem");
+const orderRegionRouter = require("./routers/orderRegion");
 
 const PORT = process.env.PORT || 3000;
 
@@ -35,7 +36,7 @@ app.use(checkJwt);
 // Parsing to json
 app.use(express.json());
 
-// using the routers as imported in line 7 above
+// using the routers as imported in line 11 above
 app.use("/magazines", magazinesRouter);
 app.use("/products", productsRouter);
 app.use("/regions", regionsRouter);
@@ -48,6 +49,7 @@ app.use("/invoices", invoiceRouter);
 app.use("/orders", orderRouter);
 app.use("/credit-notes", creditNoteRouter);
 app.use("/credit-items", creditItemRouter);
+app.use("/order-regions", orderRegionRouter);
 
 app.listen(PORT, () => {
   console.log("Application listening to port 3000");

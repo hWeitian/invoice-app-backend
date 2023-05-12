@@ -12,7 +12,6 @@ const initInvoice = (sequelize) =>
       },
       companyId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: "companies",
           key: "id",
@@ -20,7 +19,6 @@ const initInvoice = (sequelize) =>
       },
       contactId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: "contacts",
           key: "id",
@@ -38,6 +36,10 @@ const initInvoice = (sequelize) =>
         type: DataTypes.DECIMAL,
       },
       netAmount: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+      },
+      totalAmount: {
         type: DataTypes.DECIMAL,
         allowNull: false,
       },
@@ -63,6 +65,13 @@ const initInvoice = (sequelize) =>
           model: "contacts",
           key: "id",
         },
+      },
+      isDraft: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
+      url: {
+        type: DataTypes.STRING,
       },
       createdAt: {
         allowNull: false,

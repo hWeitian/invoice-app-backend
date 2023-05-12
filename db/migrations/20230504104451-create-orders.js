@@ -33,7 +33,6 @@ module.exports = {
       },
       pages: {
         type: Sequelize.INTEGER,
-        allowNull: false,
       },
       sales_note: {
         type: Sequelize.TEXT,

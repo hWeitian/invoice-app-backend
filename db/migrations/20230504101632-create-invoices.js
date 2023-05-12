@@ -11,7 +11,6 @@ module.exports = {
       },
       company_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
           model: "companies",
           key: "id",
@@ -19,7 +18,6 @@ module.exports = {
       },
       contact_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
           model: "contacts",
           key: "id",
@@ -37,6 +35,10 @@ module.exports = {
         type: Sequelize.DECIMAL,
       },
       net_amount: {
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+      },
+      total_amount: {
         type: Sequelize.DECIMAL,
         allowNull: false,
       },
@@ -62,6 +64,13 @@ module.exports = {
           model: "contacts",
           key: "id",
         },
+      },
+      is_draft: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      url: {
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,

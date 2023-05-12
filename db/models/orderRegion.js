@@ -39,6 +39,8 @@ const initOrderRegion = (sequelize) =>
     },
     {
       sequelize,
+      // If table name not specified, sequelize will select the "order_regions" table because underscored is set to true
+      tableName: "orderRegions",
       underscored: true,
       modelName: "orderRegion",
     }

@@ -9,23 +9,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      number: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       date: {
         type: Sequelize.DATE,
         allowNull: false,
       },
       company_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
           model: "companies",
           key: "id",
         },
       },
       contact_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "contacts",
+          key: "id",
+        },
+      },
+      admin_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -40,12 +42,24 @@ module.exports = {
         type: Sequelize.DECIMAL,
         allowNull: false,
       },
-      amount: {
+      net_amount: {
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+      },
+      total_amount: {
         type: Sequelize.DECIMAL,
         allowNull: false,
       },
       is_signed: {
         type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      is_draft: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      url: {
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,

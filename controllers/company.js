@@ -13,7 +13,6 @@ async function getAll(req, res) {
 
 async function getOne(req, res) {
   const { id } = req.params;
-  console.log(id);
   try {
     const newCompany = await Company.findOne({
       where: { id: id },
@@ -25,7 +24,21 @@ async function getOne(req, res) {
   }
 }
 
+async function getAllNames(req, res) {
+  try {
+    // Get the company name and id only
+    // Rename the name column as label
+    const newCompany = await Company.findAll({
+      attributes: [["name", "label"], "id", "billingAddress"],
+    });
+    return res.json(newCompany);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   getOne,
+  getAllNames,
 };
