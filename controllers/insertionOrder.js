@@ -1,6 +1,6 @@
 const db = require("../db/models/index");
 
-const { InsertionOrder } = db;
+const { InsertionOrder, Order, Company, Contact, Product } = db;
 
 async function getAll(req, res) {
   try {
@@ -45,8 +45,25 @@ async function updateRow(req, res) {
   }
 }
 
+async function getTableData(req, res) {
+  try {
+    const tableData = await InsertionOrder.findAll({
+      include: [
+        { model: Order, include: [Product] },
+        { model: Company },
+        { model: Contact },
+      ],
+      where: { isDraft: false },
+    });
+    return res.json(tableData);
+  } catch (e) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   insertEmptyRow,
   updateRow,
+  getTableData,
 };
