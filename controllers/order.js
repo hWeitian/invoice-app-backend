@@ -24,6 +24,7 @@ async function addOrders(req, res) {
         colour: order.colour,
         position: order.position,
         pages: null,
+        invDescription: null,
         salesNote: data.notes,
         cost: order.amount,
         insertionOrderId: data.insertionId,
@@ -59,6 +60,7 @@ async function addOrders(req, res) {
       colour: orders[0].colour,
       position: orders[0].position,
       pages: null,
+      invDescription: null,
       salesNote: data.notes,
       cost: orders[0].amount,
       insertionOrderId: data.insertionId,
@@ -97,7 +99,72 @@ async function addOrders(req, res) {
   }
 }
 
+async function addOrUpdate(req, res) {
+  const data = req.body;
+  let dataToCreate = [];
+  let newDataToCreate = [];
+  let idToUpdate = [];
+
+  // Separate the invoiceItems into 2 categories
+  // idToUpdate are items that already exist in the database
+  // dataToCreate are items that do not exist in the database
+  data.invoiceItems.forEach((item) => {
+    if (item.id !== "") {
+      idToUpdate.push(item.id);
+    } else {
+      dataToCreate.push(item);
+    }
+  });
+
+  // If there are new items to be added to the database,
+  // create each row according to the fields
+  if (dataToCreate.length > 0) {
+    newDataToCreate = dataToCreate.map((item) => {
+      return {
+        magazineId: null,
+        productId: null,
+        colour: null,
+        position: null,
+        pages: null,
+        invDescription: item.description,
+        salesNote: null,
+        cost: item.amount,
+        insertionOrderId: null,
+        invoiceId: data.invoiceNum,
+        index: 0,
+      };
+    });
+  }
+
+  try {
+    // If there are items to update, do the following
+    if (idToUpdate.length > 0) {
+      const toUpdate = await Order.findAll({ where: { id: idToUpdate } });
+      const dataToUpdate = toUpdate.map((item) => item.dataValues);
+
+      const updatedData = dataToUpdate.map((item) => {
+        item.invoiceId = data.invoiceNum;
+        return item;
+      });
+
+      await Order.bulkCreate(updatedData, {
+        updateOnDuplicate: ["invoiceId"],
+        where: { id: ["id"] },
+      });
+    }
+
+    // If there are new items to be added into the database, do the following
+    if (newDataToCreate.length > 0) {
+      await Order.bulkCreate(newDataToCreate);
+    }
+    return res.json({ message: "update successfull" });
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   addOrders,
+  addOrUpdate,
 };

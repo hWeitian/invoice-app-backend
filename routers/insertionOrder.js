@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get("/", insertionOrders.getAll);
 router.get("/table-data", insertionOrders.getTableData);
+router.get("/invoice-data", insertionOrders.getDataForInvoice);
 
 // Insert an empty row to get insertion order number
 router.post("/", insertionOrders.insertEmptyRow);

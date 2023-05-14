@@ -29,7 +29,6 @@ module.exports = {
       },
       due_date: {
         type: Sequelize.DATE,
-        allowNull: false,
       },
       discount: {
         type: Sequelize.DECIMAL,
@@ -70,6 +69,9 @@ module.exports = {
         allowNull: false,
       },
       url: {
+        type: Sequelize.STRING,
+      },
+      purchase_order: {
         type: Sequelize.STRING,
       },
       created_at: {

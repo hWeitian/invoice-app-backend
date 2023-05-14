@@ -1,6 +1,6 @@
 const db = require("../db/models/index");
 
-const { InsertionOrder, Order, Company, Contact, Product } = db;
+const { InsertionOrder, Order, Company, Contact, Product, Magazine } = db;
 
 async function getAll(req, res) {
   try {
@@ -61,9 +61,34 @@ async function getTableData(req, res) {
   }
 }
 
+async function getDataForInvoice(req, res) {
+  try {
+    const data = await InsertionOrder.findAll({
+      include: [
+        { model: Company },
+        { model: Contact },
+        {
+          model: Order,
+          where: { invoiceId: null },
+          include: [Product, Magazine],
+        },
+      ],
+      where: { isDraft: false },
+    });
+    // Add Company name in data for easy reference from frontend
+    data.forEach((item) => {
+      item.dataValues.label = `${item.dataValues.id} - ${item.dataValues.company.name}`;
+    });
+    return res.json(data);
+  } catch (e) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   insertEmptyRow,
   updateRow,
   getTableData,
+  getDataForInvoice,
 };

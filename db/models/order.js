@@ -19,7 +19,6 @@ const initOrder = (sequelize) =>
       },
       productId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: "products",
           key: "id",
@@ -30,10 +29,12 @@ const initOrder = (sequelize) =>
       },
       position: {
         type: DataTypes.STRING,
-        allowNull: false,
       },
       pages: {
         type: DataTypes.INTEGER,
+      },
+      invDescription: {
+        type: DataTypes.STRING,
       },
       salesNote: {
         type: DataTypes.TEXT,

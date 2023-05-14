@@ -5,5 +5,6 @@ const exchangeRates = require("../controllers/exchangeRate");
 const router = express.Router();
 
 router.get("/", exchangeRates.getAll);
+router.get("/latest", exchangeRates.getOneLatest);
 
 module.exports = router;

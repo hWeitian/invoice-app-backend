@@ -30,7 +30,6 @@ const initInvoice = (sequelize) =>
       },
       dueDate: {
         type: DataTypes.DATE,
-        allowNull: false,
       },
       discount: {
         type: DataTypes.DECIMAL,
@@ -71,6 +70,9 @@ const initInvoice = (sequelize) =>
         allowNull: false,
       },
       url: {
+        type: DataTypes.STRING,
+      },
+      purchaseOrder: {
         type: DataTypes.STRING,
       },
       createdAt: {

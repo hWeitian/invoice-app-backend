@@ -6,4 +6,7 @@ const router = express.Router();
 
 router.get("/", invoices.getAll);
 
+router.post("/add-empty", invoices.insertEmptyRow);
+router.put("/:id", invoices.updateRow);
+
 module.exports = router;

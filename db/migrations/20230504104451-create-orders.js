@@ -18,7 +18,6 @@ module.exports = {
       },
       product_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
           model: "products",
           key: "id",
@@ -29,10 +28,12 @@ module.exports = {
       },
       position: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
       pages: {
         type: Sequelize.INTEGER,
+      },
+      inv_description: {
+        type: Sequelize.STRING,
       },
       sales_note: {
         type: Sequelize.TEXT,
