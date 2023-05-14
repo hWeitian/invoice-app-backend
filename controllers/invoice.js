@@ -1,6 +1,6 @@
 const db = require("../db/models/index");
 
-const { Invoice } = db;
+const { Invoice, Company } = db;
 
 async function getAll(req, res) {
   try {
@@ -49,8 +49,35 @@ async function updateRow(req, res) {
   }
 }
 
+async function getTableData(req, res) {
+  try {
+    const tableData = await Invoice.findAll({
+      include: [{ model: Company }],
+      where: { isDraft: false },
+    });
+
+    tableData.forEach((data) => {
+      if (
+        Number(data.dataValues.amountPaid) < Number(data.dataValues.totalAmount)
+      ) {
+        data.dataValues["status"] = "Pending";
+      } else if (
+        Number(data.dataValues.amountPaid) ===
+        Number(data.dataValues.totalAmount)
+      ) {
+        data.dataValues["status"] = "Paid";
+      }
+    });
+
+    return res.json(tableData);
+  } catch (e) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   insertEmptyRow,
   updateRow,
+  getTableData,
 };
