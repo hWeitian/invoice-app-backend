@@ -10,7 +10,7 @@ module.exports = {
         title: "Ms",
         email: "huangweitian1@hotmail.com",
         designation: "Admin",
-        company_id: 21,
+        company_id: 10,
         is_admin: true,
         created_at: new Date(),
         updated_at: new Date(),

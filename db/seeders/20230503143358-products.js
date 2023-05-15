@@ -46,24 +46,6 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
-      {
-        name: "Translation",
-        cost: 5000,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        name: "Supplements",
-        cost: 0,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        name: "Special Project",
-        cost: 0,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
     ]);
   },
 

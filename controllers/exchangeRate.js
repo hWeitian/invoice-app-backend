@@ -14,7 +14,7 @@ async function getAll(req, res) {
 async function getOneLatest(req, res) {
   try {
     const newExchangeRate = await ExchangeRate.findOne({
-      order: [["createdAt", "DESC"]],
+      order: [["date", "DESC"]],
     });
     return res.json(newExchangeRate);
   } catch (err) {

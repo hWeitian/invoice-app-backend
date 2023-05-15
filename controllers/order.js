@@ -1,6 +1,6 @@
 const db = require("../db/models/index");
 
-const { Order, orderRegion } = db;
+const { Order, orderRegion, Region, Invoice, Company, Product } = db;
 
 async function getAll(req, res) {
   try {
@@ -163,8 +163,44 @@ async function addOrUpdate(req, res) {
   }
 }
 
+async function getDataforPagination(req, res) {
+  const magId = req.params.id;
+  try {
+    const tableData = await Order.findAll({
+      where: { magazineId: magId },
+      include: [
+        { model: Region },
+        {
+          model: Invoice,
+          where: { isDraft: false },
+          include: [{ model: Company }],
+        },
+        { model: Product },
+      ],
+    });
+    tableData.forEach((data) => {
+      if (
+        Number(data.dataValues.invoice.amountPaid) <
+        Number(data.dataValues.invoice.totalAmount)
+      ) {
+        data.dataValues["status"] = "Pending";
+      } else if (
+        Number(data.dataValues.invoice.amountPaid) ===
+        Number(data.dataValues.invoice.totalAmount)
+      ) {
+        data.dataValues["status"] = "Paid";
+      }
+    });
+
+    return res.json(tableData);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   addOrders,
   addOrUpdate,
+  getDataforPagination,
 };
