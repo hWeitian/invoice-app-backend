@@ -1,10 +1,13 @@
 const db = require("../db/models/index");
+const { Op } = require("sequelize");
 
 const { Magazine } = db;
 
 async function getAll(req, res) {
   try {
-    const newMagazine = await Magazine.findAll();
+    const newMagazine = await Magazine.findAll({
+      order: [["id", "DESC"]],
+    });
     return res.json(newMagazine);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
@@ -30,7 +33,7 @@ async function getCurrentIssue(req, res) {
   const month = getCurrentIssueMonth(date.getMonth());
   const year = date.getFullYear();
   try {
-    const newMagazine = await Magazine.findOne({
+    const newMagazine = await Magazine.findAll({
       where: { [Op.and]: [{ month: month }, { year: year }] },
     });
     console.log(newMagazine);
