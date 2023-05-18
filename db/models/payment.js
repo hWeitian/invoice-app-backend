@@ -22,6 +22,9 @@ const initPayment = (sequelize) =>
         type: DataTypes.DECIMAL,
         allowNull: false,
       },
+      url: {
+        type: DataTypes.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

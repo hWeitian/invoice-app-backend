@@ -38,6 +38,8 @@ const initInvoicePayment = (sequelize) =>
       },
     },
     {
+      // If table name not specified, sequelize will select the "invoice_payments" table because underscored is set to true
+      tableName: "invoicePayments",
       sequelize,
       underscored: true,
       modelName: "invoicePayment",
