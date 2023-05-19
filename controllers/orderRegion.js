@@ -11,13 +11,6 @@ async function getAll(req, res) {
   }
 }
 
-async function addOne(req, res) {
-  try {
-  } catch (e) {
-    return res.status(400).json({ error: true, msg: err });
-  }
-}
-
 module.exports = {
   getAll,
 };

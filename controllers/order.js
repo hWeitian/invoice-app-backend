@@ -1,6 +1,6 @@
 const db = require("../db/models/index");
 
-const { Order, orderRegion, Region, Invoice, Company, Product } = db;
+const { Order, orderRegion, Region, Invoice, Company, Product, Payment } = db;
 
 async function getAll(req, res) {
   try {
@@ -173,17 +173,35 @@ async function getDataforPagination(req, res) {
         {
           model: Invoice,
           where: { isDraft: false },
-          include: [{ model: Company }],
+          include: [{ model: Company }, { model: Payment }],
         },
         { model: Product },
       ],
     });
+
+    for (let i = 0; i < tableData.length; i++) {
+      let paidAmount = 0;
+
+      for (
+        let j = 0;
+        j < tableData[i].dataValues.invoice.payments.length;
+        j++
+      ) {
+        paidAmount += Number(
+          tableData[i].dataValues.invoice.payments[j].dataValues.amount
+        );
+      }
+      tableData[i].dataValues.invoice.amountPaid = paidAmount;
+    }
+
     tableData.forEach((data) => {
-      if (
+      if (Number(data.dataValues.invoice.amountPaid) == 0) {
+        data.dataValues["status"] = "Pending";
+      } else if (
         Number(data.dataValues.invoice.amountPaid) <
         Number(data.dataValues.invoice.totalAmount)
       ) {
-        data.dataValues["status"] = "Pending";
+        data.dataValues["status"] = "Partial Paid";
       } else if (
         Number(data.dataValues.invoice.amountPaid) ===
         Number(data.dataValues.invoice.totalAmount)

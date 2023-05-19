@@ -1,6 +1,6 @@
 const db = require("../db/models/index");
 
-const { Payment, InvoicePayment } = db;
+const { Payment, InvoicePayment, Invoice } = db;
 
 async function getAll(req, res) {
   try {
@@ -39,7 +39,21 @@ async function addOne(req, res) {
   }
 }
 
+async function getForOneInvoice(req, res) {
+  const { id } = req.params;
+  console.log(id);
+  try {
+    const allPayments = await Payment.findAll({
+      include: [{ model: Invoice, where: { id: id } }],
+    });
+    return res.json(allPayments);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   addOne,
+  getForOneInvoice,
 };

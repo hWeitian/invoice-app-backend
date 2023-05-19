@@ -36,8 +36,6 @@ async function addRates(req, res) {
 
     const addedRate = await ExchangeRate.create(newRate);
 
-    console.log(addedRate);
-
     // return res.json(newExchangeRate);
   } catch (err) {
     console.log(err);

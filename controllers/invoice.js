@@ -56,8 +56,6 @@ async function getTableData(req, res) {
       where: { isDraft: false },
     });
 
-    // console.log(tableData);
-
     for (let i = 0; i < tableData.length; i++) {
       let paidAmount = 0;
 

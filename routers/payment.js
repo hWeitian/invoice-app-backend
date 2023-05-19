@@ -5,6 +5,7 @@ const payments = require("../controllers/payment");
 const router = express.Router();
 
 router.get("/", payments.getAll);
+router.get("/:id", payments.getForOneInvoice);
 router.post("/", payments.addOne);
 
 module.exports = router;
