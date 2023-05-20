@@ -46,14 +46,19 @@ async function updateRow(req, res) {
 }
 
 async function getTableData(req, res) {
+  const { page, size } = req.params;
   try {
-    const tableData = await InsertionOrder.findAll({
+    const tableData = await InsertionOrder.findAndCountAll({
       include: [
         { model: Order, include: [Product] },
         { model: Company },
         { model: Contact },
       ],
       where: { isDraft: false },
+      limit: size,
+      offset: page * size,
+      distinct: true,
+      order: [["createdAt", "DESC"]],
     });
     return res.json(tableData);
   } catch (e) {
@@ -85,10 +90,22 @@ async function getDataForInvoice(req, res) {
   }
 }
 
+async function updateStatus(req, res) {
+  const { id } = req.params;
+  const data = req.body;
+  try {
+    const newRow = await InsertionOrder.update(data, { where: { id: id } });
+    return res.json(newRow);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   insertEmptyRow,
   updateRow,
   getTableData,
   getDataForInvoice,
+  updateStatus,
 };
