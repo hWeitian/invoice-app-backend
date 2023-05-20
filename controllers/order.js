@@ -163,19 +163,17 @@ async function addOrUpdate(req, res) {
   }
 }
 
-async function getDataforPagination(req, res) {
-  const magId = req.params.id;
+async function getDataForOverview(req, res) {
+  const { id } = req.params;
   try {
     const tableData = await Order.findAll({
-      where: { magazineId: magId },
+      where: { magazineId: id },
       include: [
-        { model: Region },
         {
           model: Invoice,
           where: { isDraft: false },
           include: [{ model: Company }, { model: Payment }],
         },
-        { model: Product },
       ],
     });
 
@@ -194,7 +192,47 @@ async function getDataforPagination(req, res) {
       tableData[i].dataValues.invoice.amountPaid = paidAmount;
     }
 
-    tableData.forEach((data) => {
+    return res.json(tableData);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+async function getDataforPagination(req, res) {
+  const { page, size, id } = req.params;
+  try {
+    const tableData = await Order.findAndCountAll({
+      where: { magazineId: id },
+      include: [
+        { model: Region },
+        {
+          model: Invoice,
+          where: { isDraft: false },
+          include: [{ model: Company }, { model: Payment }],
+        },
+        { model: Product },
+      ],
+      limit: size,
+      offset: page * size,
+      distinct: true,
+    });
+
+    for (let i = 0; i < tableData.rows.length; i++) {
+      let paidAmount = 0;
+
+      for (
+        let j = 0;
+        j < tableData.rows[i].dataValues.invoice.payments.length;
+        j++
+      ) {
+        paidAmount += Number(
+          tableData.rows[i].dataValues.invoice.payments[j].dataValues.amount
+        );
+      }
+      tableData.rows[i].dataValues.invoice.amountPaid = paidAmount;
+    }
+
+    tableData.rows.forEach((data) => {
       if (Number(data.dataValues.invoice.amountPaid) == 0) {
         data.dataValues["status"] = "Pending";
       } else if (
@@ -221,4 +259,5 @@ module.exports = {
   addOrders,
   addOrUpdate,
   getDataforPagination,
+  getDataForOverview,
 };

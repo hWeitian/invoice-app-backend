@@ -5,7 +5,7 @@ const invoices = require("../controllers/invoice");
 const router = express.Router();
 
 router.get("/", invoices.getAll);
-router.get("/table-data", invoices.getTableData);
+router.get("/table-data/:page/:size", invoices.getTableData);
 router.get("/:companyId", invoices.getAllFromCompany);
 
 router.post("/add-empty", invoices.insertEmptyRow);

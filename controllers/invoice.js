@@ -50,24 +50,29 @@ async function updateRow(req, res) {
 }
 
 async function getTableData(req, res) {
+  const { page, size } = req.params;
   try {
-    const tableData = await Invoice.findAll({
+    const tableData = await Invoice.findAndCountAll({
       include: [{ model: Company }, { model: Payment }],
       where: { isDraft: false },
+      limit: size,
+      offset: page * size,
+      distinct: true,
+      order: [["createdAt", "DESC"]],
     });
 
-    for (let i = 0; i < tableData.length; i++) {
+    for (let i = 0; i < tableData.rows.length; i++) {
       let paidAmount = 0;
 
-      for (let j = 0; j < tableData[i].dataValues.payments.length; j++) {
+      for (let j = 0; j < tableData.rows[i].dataValues.payments.length; j++) {
         paidAmount += Number(
-          tableData[i].dataValues.payments[j].dataValues.amount
+          tableData.rows[i].dataValues.payments[j].dataValues.amount
         );
       }
-      tableData[i].dataValues.amountPaid = paidAmount;
+      tableData.rows[i].dataValues.amountPaid = paidAmount;
     }
 
-    tableData.forEach((data) => {
+    tableData.rows.forEach((data) => {
       if (Number(data.dataValues.amountPaid) == 0) {
         data.dataValues["status"] = "Pending";
         data.dataValues["outstanding"] = data.dataValues.totalAmount;
