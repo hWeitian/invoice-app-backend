@@ -11,7 +11,7 @@ const initCreditNote = (sequelize) =>
         type: DataTypes.INTEGER,
       },
       creditNoteDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       invoiceId: {

@@ -19,11 +19,11 @@ const initMagazine = (sequelize) =>
         allowNull: false,
       },
       closingDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       materialDeadline: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       createdAt: {

@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false,
       },
       company_id: {
@@ -29,7 +29,6 @@ module.exports = {
       },
       admin_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
           model: "contacts",
           key: "id",

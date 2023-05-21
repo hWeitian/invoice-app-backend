@@ -15,7 +15,7 @@ const initPayment = (sequelize) =>
         allowNull: false,
       },
       paymentDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       amount: {

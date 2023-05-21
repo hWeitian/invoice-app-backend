@@ -24,11 +24,11 @@ module.exports = {
         },
       },
       invoice_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false,
       },
       due_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       discount: {
         type: Sequelize.DECIMAL,

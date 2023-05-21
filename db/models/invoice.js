@@ -25,11 +25,11 @@ const initInvoice = (sequelize) =>
         },
       },
       invoiceDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       dueDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
       },
       discount: {
         type: DataTypes.DECIMAL,

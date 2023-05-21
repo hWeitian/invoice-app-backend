@@ -11,7 +11,7 @@ const initInsertionOrder = (sequelize) =>
         type: DataTypes.INTEGER,
       },
       date: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       companyId: {

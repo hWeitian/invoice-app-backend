@@ -18,11 +18,11 @@ module.exports = {
         allowNull: false,
       },
       closing_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false,
       },
       material_deadline: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false,
       },
       created_at: {

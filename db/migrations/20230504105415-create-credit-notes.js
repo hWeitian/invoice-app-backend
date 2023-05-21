@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       credit_note_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false,
       },
       invoice_id: {
