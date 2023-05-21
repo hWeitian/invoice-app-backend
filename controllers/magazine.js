@@ -1,6 +1,5 @@
 const db = require("../db/models/index");
 const { Op } = require("sequelize");
-const moment = require("moment");
 
 const { Magazine } = db;
 
@@ -8,18 +7,22 @@ async function getAll(req, res) {
   try {
     const newMagazine = await Magazine.findAll({
       order: [["id", "DESC"]],
-      // where: { id: 1 },
     });
-    // console.log(newMagazine);
-    // newMagazine.forEach((magazine) => {
-    //   magazine.dataValues.closingDate = moment(
-    //     magazine.dataValues.closingDate
-    //   ).utc();
-    //   magazine.dataValues.materialDeadline = moment(
-    //     magazine.dataValues.materialDeadline
-    //   ).utc();
-    // });
-    console.log(newMagazine);
+    return res.json(newMagazine);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+async function getPaginatedData(req, res) {
+  const { page, size } = req.params;
+  try {
+    const newMagazine = await Magazine.findAndCountAll({
+      limit: size,
+      offset: page * size,
+      distinct: true,
+      order: [["id", "DESC"]],
+    });
     return res.json(newMagazine);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
@@ -79,9 +82,24 @@ async function updateIssue(req, res) {
   }
 }
 
+async function deleteIssue(req, res) {
+  console.log("here");
+  const { id } = req.params;
+  try {
+    const deletedMagazine = await Magazine.destroy({
+      where: { id: id },
+    });
+    return res.json(deletedMagazine);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   getCurrentIssue,
   updateIssue,
   addIssue,
+  getPaginatedData,
+  deleteIssue,
 };
