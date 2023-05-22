@@ -51,7 +51,6 @@ async function getCurrentIssue(req, res) {
     const newMagazine = await Magazine.findAll({
       where: { [Op.and]: [{ month: month }, { year: year }] },
     });
-    console.log(newMagazine);
     return res.json(newMagazine);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
@@ -62,7 +61,6 @@ async function addIssue(req, res) {
   const newData = req.body;
   try {
     const newMagazine = await Magazine.create(newData);
-    console.log(newMagazine);
     return res.json(newMagazine);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
@@ -83,7 +81,6 @@ async function updateIssue(req, res) {
 }
 
 async function deleteIssue(req, res) {
-  console.log("here");
   const { id } = req.params;
   try {
     const deletedMagazine = await Magazine.destroy({
