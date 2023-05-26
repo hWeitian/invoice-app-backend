@@ -16,7 +16,7 @@ async function getAll(req, res) {
 async function getOneLatest(req, res) {
   try {
     const newExchangeRate = await ExchangeRate.findOne({
-      order: [["date", "DESC"]],
+      order: [["id", "DESC"]],
     });
     return res.json(newExchangeRate);
   } catch (err) {
@@ -35,11 +35,8 @@ async function addRates(req, res) {
     };
 
     const addedRate = await ExchangeRate.create(newRate);
-
-    // return res.json(newExchangeRate);
   } catch (err) {
     console.log(err);
-    // return res.status(400).json({ error: true, msg: err });
   }
 }
 
