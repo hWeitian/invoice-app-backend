@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", orders.getAll);
 router.get("/magazine/:id", orders.getDataForOverview);
-router.get("/magazine/:id/:page/:size", orders.getDataforPagination);
+router.get("/magazine/:id/:regions/:page/:size", orders.getDataforPagination);
 router.post("/", orders.addOrders);
 router.put("/", orders.addOrUpdate);
 

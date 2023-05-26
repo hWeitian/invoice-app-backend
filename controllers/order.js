@@ -1,4 +1,5 @@
 const db = require("../db/models/index");
+const { Op } = require("sequelize");
 
 const { Order, orderRegion, Region, Invoice, Company, Product, Payment } = db;
 
@@ -199,12 +200,21 @@ async function getDataForOverview(req, res) {
 }
 
 async function getDataforPagination(req, res) {
-  const { page, size, id } = req.params;
+  const { page, size, id, regions } = req.params;
+  const regionsArray = splitRegions(regions);
+  console.log(regionsArray);
   try {
     const tableData = await Order.findAndCountAll({
       where: { magazineId: id },
       include: [
-        { model: Region },
+        {
+          model: Region,
+          where: {
+            name: {
+              [Op.or]: regionsArray,
+            },
+          },
+        },
         {
           model: Invoice,
           where: { isDraft: false },
@@ -252,6 +262,10 @@ async function getDataforPagination(req, res) {
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }
+}
+
+function splitRegions(regions) {
+  return regions.split("&");
 }
 
 module.exports = {
