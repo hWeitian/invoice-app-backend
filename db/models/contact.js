@@ -25,6 +25,7 @@ const initContact = (sequelize) =>
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
       },
       designation: {
         type: DataTypes.STRING,
