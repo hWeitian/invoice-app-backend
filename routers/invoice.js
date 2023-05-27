@@ -7,6 +7,11 @@ const router = express.Router();
 router.get("/", invoices.getAll);
 router.get("/table-data/:page/:size", invoices.getTableData);
 router.get("/:companyId", invoices.getAllFromCompany);
+router.get(
+  "/search/company/:searchText/:page/:size",
+  invoices.searchInvoiceByCopmpany
+);
+router.get("/search/id/:searchText/:page/:size", invoices.searchInvoiceById);
 
 router.post("/add-empty", invoices.insertEmptyRow);
 router.put("/:id", invoices.updateRow);

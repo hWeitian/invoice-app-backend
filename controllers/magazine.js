@@ -29,6 +29,38 @@ async function getPaginatedData(req, res) {
   }
 }
 
+async function searchMagByYear(req, res) {
+  const { searchText, page, size } = req.params;
+  try {
+    const magazines = await Magazine.findAndCountAll({
+      where: { year: searchText },
+      limit: size,
+      offset: page * size,
+      distinct: true,
+      order: [["id", "DESC"]],
+    });
+    return res.json(magazines);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+async function searchMagByMonth(req, res) {
+  const { searchText, page, size } = req.params;
+  try {
+    const magazines = await Magazine.findAndCountAll({
+      where: { month: { [Op.iLike]: `%${searchText}%` } },
+      limit: size,
+      offset: page * size,
+      distinct: true,
+      order: [["id", "DESC"]],
+    });
+    return res.json(magazines);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 function getCurrentIssueMonth(month) {
   let monthString;
   if (month === 0 || month === 1 || month === 2) {
@@ -99,4 +131,6 @@ module.exports = {
   addIssue,
   getPaginatedData,
   deleteIssue,
+  searchMagByYear,
+  searchMagByMonth,
 };

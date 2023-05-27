@@ -202,7 +202,6 @@ async function getDataForOverview(req, res) {
 async function getDataforPagination(req, res) {
   const { page, size, id, regions } = req.params;
   const regionsArray = splitRegions(regions);
-  console.log(regionsArray);
   try {
     const tableData = await Order.findAndCountAll({
       where: { magazineId: id },

@@ -1,4 +1,5 @@
 const db = require("../db/models/index");
+const { Op } = require("sequelize");
 
 const { Company, Contact } = db;
 
@@ -30,6 +31,7 @@ async function getAllNames(req, res) {
     // Rename the name column as label
     const newCompany = await Company.findAll({
       attributes: [["name", "label"], "id", "billingAddress"],
+      order: [["name", "ASC"]],
     });
     return res.json(newCompany);
   } catch (err) {
@@ -47,6 +49,23 @@ async function getPaginatedData(req, res) {
       order: [["id", "ASC"]],
     });
     return res.json(comapnies);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+async function searchByName(req, res) {
+  const { searchText, page, size } = req.params;
+  try {
+    const companies = await Company.findAndCountAll({
+      limit: size,
+      offset: page * size,
+      distinct: true,
+      order: [["id", "ASC"]],
+      where: { name: { [Op.iLike]: `%${searchText}%` } },
+    });
+
+    return res.json(companies);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }
@@ -95,4 +114,5 @@ module.exports = {
   addCompany,
   updateCompany,
   deleteCompany,
+  searchByName,
 };

@@ -1,4 +1,5 @@
 const db = require("../db/models/index");
+const { Op } = require("sequelize");
 
 const { InsertionOrder, Order, Company, Contact, Product, Magazine } = db;
 
@@ -101,6 +102,50 @@ async function updateStatus(req, res) {
   }
 }
 
+async function searchIoByCopmpany(req, res) {
+  const { searchText, page, size } = req.params;
+  try {
+    const insertionOrders = await InsertionOrder.findAndCountAll({
+      where: { isDraft: false },
+      limit: size,
+      offset: page * size,
+      distinct: true,
+      order: [["createdAt", "DESC"]],
+      include: [
+        { model: Company, where: { name: { [Op.iLike]: `%${searchText}%` } } },
+        { model: Contact },
+        { model: Order, include: [Product] },
+      ],
+    });
+
+    return res.json(insertionOrders);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+async function searchIoById(req, res) {
+  const { searchText, page, size } = req.params;
+  try {
+    const insertionOrders = await InsertionOrder.findAndCountAll({
+      where: { isDraft: false, id: searchText },
+      limit: size,
+      offset: page * size,
+      distinct: true,
+      order: [["createdAt", "DESC"]],
+      include: [
+        { model: Company },
+        { model: Contact },
+        { model: Order, include: [Product] },
+      ],
+    });
+
+    return res.json(insertionOrders);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   insertEmptyRow,
@@ -108,4 +153,6 @@ module.exports = {
   getTableData,
   getDataForInvoice,
   updateStatus,
+  searchIoByCopmpany,
+  searchIoById,
 };

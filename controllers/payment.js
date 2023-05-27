@@ -41,7 +41,6 @@ async function addOne(req, res) {
 
 async function getForOneInvoice(req, res) {
   const { id } = req.params;
-  console.log(id);
   try {
     const allPayments = await Payment.findAll({
       include: [{ model: Invoice, where: { id: id } }],

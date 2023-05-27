@@ -44,7 +44,6 @@ const getRates = new CronJob(
   "00 01 00 * * *",
   function () {
     addRates();
-    console.log("You will see this message every midnight at 12:01pm");
   },
   null,
   true,

@@ -1,4 +1,5 @@
 const db = require("../db/models/index");
+const { Op } = require("sequelize");
 const axios = require("axios").default;
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -48,6 +49,57 @@ async function getPaginatedData(req, res) {
       order: [["id", "ASC"]],
     });
     return res.json(newContacts);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+async function searchContactByCopmpany(req, res) {
+  const { searchText, page, size } = req.params;
+  try {
+    const contacts = await Contact.findAndCountAll({
+      limit: size,
+      offset: page * size,
+      distinct: true,
+      order: [["id", "ASC"]],
+      include: [
+        { model: Company, where: { name: { [Op.iLike]: `%${searchText}%` } } },
+      ],
+    });
+
+    return res.json(contacts);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+async function searchContactByName(req, res) {
+  const { searchText, page, size } = req.params;
+  try {
+    const contacts = await Contact.findAndCountAll({
+      where: {
+        [Op.or]: [
+          {
+            lastName: {
+              [Op.iLike]: `%${searchText}%`,
+            },
+          },
+          {
+            firstName: {
+              [Op.iLike]: `%${searchText}%`,
+            },
+          },
+        ],
+      },
+      // where: { lastName: { [Op.iLike]: `%${searchText}%` } },
+      include: [{ model: Company }],
+      limit: size,
+      offset: page * size,
+      distinct: true,
+      order: [["id", "ASC"]],
+    });
+
+    return res.json(contacts);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }
@@ -304,4 +356,6 @@ module.exports = {
   addContact,
   updateContact,
   deleteContact,
+  searchContactByCopmpany,
+  searchContactByName,
 };
