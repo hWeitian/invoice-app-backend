@@ -50,6 +50,7 @@ async function updateRow(req, res) {
   }
 }
 
+/** Function to add payment status to each invoice */
 function formatTableData(tableData) {
   for (let i = 0; i < tableData.rows.length; i++) {
     let paidAmount = 0;
@@ -103,13 +104,41 @@ async function getTableData(req, res) {
   }
 }
 
+function filterPaid(tableData) {
+  let finalData = [];
+  for (let i = 0; i < tableData.length; i++) {
+    let paidAmount = 0;
+
+    for (let j = 0; j < tableData[i].dataValues.payments.length; j++) {
+      paidAmount += Number(
+        tableData[i].dataValues.payments[j].dataValues.amount
+      );
+    }
+    tableData[i].dataValues.amountPaid = paidAmount;
+  }
+
+  tableData.forEach((data) => {
+    if (
+      Number(data.dataValues.amountPaid) == 0 ||
+      Number(data.dataValues.amountPaid) < Number(data.dataValues.totalAmount)
+    ) {
+      finalData.push(data);
+    }
+  });
+
+  return finalData;
+}
+
 async function getAllFromCompany(req, res) {
   const { companyId } = req.params;
   try {
     const invoices = await Invoice.findAll({
       where: { companyId: companyId },
+      include: [{ model: Payment }],
     });
-    return res.json(invoices);
+
+    const finalInvoices = filterPaid(invoices);
+    return res.json(finalInvoices);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }
