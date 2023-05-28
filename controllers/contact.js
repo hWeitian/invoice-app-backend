@@ -91,7 +91,6 @@ async function searchContactByName(req, res) {
           },
         ],
       },
-      // where: { lastName: { [Op.iLike]: `%${searchText}%` } },
       include: [{ model: Company }],
       limit: size,
       offset: page * size,
