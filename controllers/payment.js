@@ -51,8 +51,29 @@ async function getForOneInvoice(req, res) {
   }
 }
 
+async function deleteOne(req, res) {
+  const { id } = req.params;
+  const { url } = req.body;
+  try {
+    const { count, rows } = await Payment.findAndCountAll({
+      where: { url: url },
+    });
+    const response = await Payment.destroy({
+      where: { id: id },
+    });
+    if (count > 1) {
+      return res.send("Not Unique");
+    } else {
+      return res.send("Unique");
+    }
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   addOne,
   getForOneInvoice,
+  deleteOne,
 };

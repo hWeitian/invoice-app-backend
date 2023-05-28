@@ -80,10 +80,11 @@ async function getDataForInvoice(req, res) {
         },
       ],
       where: { isDraft: false },
+      order: [["id", "ASC"]],
     });
     // Add Company name in data for easy reference from frontend
     data.forEach((item) => {
-      item.dataValues.label = `${item.dataValues.id} - ${item.dataValues.company.name}`;
+      item.dataValues.label = `IO-${item.dataValues.id} - ${item.dataValues.company.name}`;
     });
     return res.json(data);
   } catch (e) {

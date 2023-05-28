@@ -7,5 +7,6 @@ const router = express.Router();
 router.get("/", payments.getAll);
 router.get("/:id", payments.getForOneInvoice);
 router.post("/", payments.addOne);
+router.delete("/:id", payments.deleteOne);
 
 module.exports = router;
