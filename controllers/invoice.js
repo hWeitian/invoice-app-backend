@@ -149,8 +149,6 @@ async function searchInvoiceByCopmpany(req, res) {
   try {
     const invoices = await Invoice.findAndCountAll({
       where: { isDraft: false },
-      limit: size,
-      offset: page * size,
       distinct: true,
       order: [["createdAt", "DESC"]],
       include: [
@@ -159,9 +157,30 @@ async function searchInvoiceByCopmpany(req, res) {
       ],
     });
 
-    const formattedData = formatTableData(invoices);
+    let finalData = {
+      count: invoices.count,
+      rows: [],
+    };
 
-    return res.json(formattedData);
+    const pageNum = Number(page);
+    const sizeNum = Number(size);
+
+    if (invoices.count > sizeNum) {
+      const startIndex = pageNum * sizeNum;
+      const endIndex = startIndex + (sizeNum - 1);
+
+      for (let i = startIndex; i <= endIndex; i++) {
+        if (invoices.rows[i] !== undefined) {
+          finalData.rows.push(invoices.rows[i]);
+        }
+      }
+
+      const formattedData = formatTableData(finalData);
+      return res.json(formattedData);
+    } else {
+      const formattedData = formatTableData(invoices);
+      return res.json(formattedData);
+    }
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }
