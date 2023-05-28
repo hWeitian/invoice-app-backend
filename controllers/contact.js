@@ -126,7 +126,7 @@ async function updateContact(req, res) {
       where: { id: id },
     });
 
-    if (adminChanged) {
+    if (adminChanged === "true") {
       if (newData.isAdmin) {
         await addUserToAuth(newData.firstName, newData.email);
       } else {
