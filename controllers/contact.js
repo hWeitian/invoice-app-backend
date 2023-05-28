@@ -133,6 +133,9 @@ async function updateContact(req, res) {
         const userId = await getUserFromAuth(newData.email);
         const response = await deleteUserFromAuth(userId);
       }
+    } else if (newData.isAdmin === true) {
+      const userId = await getUserFromAuth(newData.email);
+      const response = await updateUserInAuth(userId, newData.firstName);
     }
 
     return res.json(updatedContact);
@@ -168,6 +171,27 @@ async function getAuthAccessToken() {
 
   const response = await axios.request(options);
   return response.data.access_token;
+}
+
+async function updateUserInAuth(userId, userName) {
+  try {
+    const accessToken = await getAuthAccessToken();
+    const user = await axios.patch(
+      `https://${process.env.AUTH_DOMAIN}/api/v2/users/${userId}`,
+      {
+        name: userName,
+      },
+      {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return user.data.user_id;
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 async function createUser(accessToken, newUser) {
