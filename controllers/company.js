@@ -58,14 +58,33 @@ async function searchByName(req, res) {
   const { searchText, page, size } = req.params;
   try {
     const companies = await Company.findAndCountAll({
-      limit: size,
-      offset: page * size,
       distinct: true,
       order: [["id", "ASC"]],
       where: { name: { [Op.iLike]: `%${searchText}%` } },
     });
 
-    return res.json(companies);
+    let finalData = {
+      count: companies.count,
+      rows: [],
+    };
+
+    const pageNum = Number(page);
+    const sizeNum = Number(size);
+
+    if (companies.count > sizeNum) {
+      const startIndex = pageNum * sizeNum;
+      const endIndex = startIndex + (sizeNum - 1);
+
+      for (let i = startIndex; i <= endIndex; i++) {
+        if (companies.rows[i] !== undefined) {
+          finalData.rows.push(companies.rows[i]);
+        }
+      }
+
+      return res.json(finalData);
+    } else {
+      return res.json(companies);
+    }
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }

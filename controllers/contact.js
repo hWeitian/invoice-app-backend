@@ -58,8 +58,6 @@ async function searchContactByCopmpany(req, res) {
   const { searchText, page, size } = req.params;
   try {
     const contacts = await Contact.findAndCountAll({
-      limit: size,
-      offset: page * size,
       distinct: true,
       order: [["id", "ASC"]],
       include: [
@@ -67,7 +65,28 @@ async function searchContactByCopmpany(req, res) {
       ],
     });
 
-    return res.json(contacts);
+    let finalData = {
+      count: contacts.count,
+      rows: [],
+    };
+
+    const pageNum = Number(page);
+    const sizeNum = Number(size);
+
+    if (contacts.count > sizeNum) {
+      const startIndex = pageNum * sizeNum;
+      const endIndex = startIndex + (sizeNum - 1);
+
+      for (let i = startIndex; i <= endIndex; i++) {
+        if (contacts.rows[i] !== undefined) {
+          finalData.rows.push(contacts.rows[i]);
+        }
+      }
+
+      return res.json(finalData);
+    } else {
+      return res.json(contacts);
+    }
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }
@@ -92,13 +111,32 @@ async function searchContactByName(req, res) {
         ],
       },
       include: [{ model: Company }],
-      limit: size,
-      offset: page * size,
       distinct: true,
       order: [["id", "ASC"]],
     });
 
-    return res.json(contacts);
+    let finalData = {
+      count: contacts.count,
+      rows: [],
+    };
+
+    const pageNum = Number(page);
+    const sizeNum = Number(size);
+
+    if (contacts.count > sizeNum) {
+      const startIndex = pageNum * sizeNum;
+      const endIndex = startIndex + (sizeNum - 1);
+
+      for (let i = startIndex; i <= endIndex; i++) {
+        if (contacts.rows[i] !== undefined) {
+          finalData.rows.push(contacts.rows[i]);
+        }
+      }
+
+      return res.json(finalData);
+    } else {
+      return res.json(contacts);
+    }
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }

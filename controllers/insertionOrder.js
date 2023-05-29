@@ -108,8 +108,6 @@ async function searchIoByCopmpany(req, res) {
   try {
     const insertionOrders = await InsertionOrder.findAndCountAll({
       where: { isDraft: false },
-      limit: size,
-      offset: page * size,
       distinct: true,
       order: [["createdAt", "DESC"]],
       include: [
@@ -118,6 +116,29 @@ async function searchIoByCopmpany(req, res) {
         { model: Order, include: [Product] },
       ],
     });
+
+    let finalData = {
+      count: insertionOrders.count,
+      rows: [],
+    };
+
+    const pageNum = Number(page);
+    const sizeNum = Number(size);
+
+    if (insertionOrders.count > sizeNum) {
+      const startIndex = pageNum * sizeNum;
+      const endIndex = startIndex + (sizeNum - 1);
+
+      for (let i = startIndex; i <= endIndex; i++) {
+        if (insertionOrders.rows[i] !== undefined) {
+          finalData.rows.push(insertionOrders.rows[i]);
+        }
+      }
+
+      return res.json(finalData);
+    } else {
+      return res.json(insertionOrders);
+    }
 
     return res.json(insertionOrders);
   } catch (err) {

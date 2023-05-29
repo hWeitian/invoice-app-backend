@@ -34,12 +34,32 @@ async function searchMagByYear(req, res) {
   try {
     const magazines = await Magazine.findAndCountAll({
       where: { year: searchText },
-      limit: size,
-      offset: page * size,
       distinct: true,
       order: [["id", "DESC"]],
     });
-    return res.json(magazines);
+
+    let finalData = {
+      count: magazines.count,
+      rows: [],
+    };
+
+    const pageNum = Number(page);
+    const sizeNum = Number(size);
+
+    if (magazines.count > sizeNum) {
+      const startIndex = pageNum * sizeNum;
+      const endIndex = startIndex + (sizeNum - 1);
+
+      for (let i = startIndex; i <= endIndex; i++) {
+        if (magazines.rows[i] !== undefined) {
+          finalData.rows.push(magazines.rows[i]);
+        }
+      }
+
+      return res.json(finalData);
+    } else {
+      return res.json(magazines);
+    }
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }
@@ -50,12 +70,32 @@ async function searchMagByMonth(req, res) {
   try {
     const magazines = await Magazine.findAndCountAll({
       where: { month: { [Op.iLike]: `%${searchText}%` } },
-      limit: size,
-      offset: page * size,
       distinct: true,
       order: [["id", "DESC"]],
     });
-    return res.json(magazines);
+
+    let finalData = {
+      count: magazines.count,
+      rows: [],
+    };
+
+    const pageNum = Number(page);
+    const sizeNum = Number(size);
+
+    if (magazines.count > sizeNum) {
+      const startIndex = pageNum * sizeNum;
+      const endIndex = startIndex + (sizeNum - 1);
+
+      for (let i = startIndex; i <= endIndex; i++) {
+        if (magazines.rows[i] !== undefined) {
+          finalData.rows.push(magazines.rows[i]);
+        }
+      }
+
+      return res.json(finalData);
+    } else {
+      return res.json(magazines);
+    }
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }
