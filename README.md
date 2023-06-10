@@ -9,4 +9,5 @@ Backend for [invoiceGenie](https://github.com/hWeitian/invoice-app-frontend)
 - `npx sequelize db:create` to create database
 - `npx sequelize db:migrate` to create tables
 - `npx sequelize db:seed:all` to create seed data
+- Clone and setup frontend at [invoice-app-frontend](https://github.com/hWeitian/invoice-app-frontend)
 - `npm start` to start database locally
