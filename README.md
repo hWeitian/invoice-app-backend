@@ -14,6 +14,12 @@ Backend for [invoiceGenie](https://github.com/hWeitian/invoice-app-frontend)
 - Create a [SendGrid](https://sendgrid.com/) account, setup Sending Identity and generate an API key
 - Configure `.env` file, make sure to get your own API keys stated below and insert it into your `.env` file
   ```
+  DB_USERNAME=postgres
+  DB_PASSWORD= <Postgres database password>
+  DB_NAME= <Postgres database name>
+  DB_HOST= <Postgres database host>
+  DB_DIALECT=postgres
+  PORT=3000
   AUDIENCE= <Auth0 Domain>
   AUTH_CLIENTID= <Auth0 client id>
   AUTH_CONNECTION= <Auth0 database name>
