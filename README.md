@@ -10,8 +10,8 @@ Backend for [invoiceGenie](https://github.com/hWeitian/invoice-app-frontend)
 - `npx sequelize db:migrate` to create tables
 - `npx sequelize db:seed:all` to create seed data
 - Clone and setup frontend at [invoice-app-frontend](https://github.com/hWeitian/invoice-app-frontend)
-- Create an Auth0 account and setup an Auth0 API and Applications
-- Create a SendGrid account, setup Sending Identity and generate an API key
+- Create an [Auth0](https://auth0.com/) account and setup an Auth0 API and Applications
+- Create a [SendGrid](https://sendgrid.com/) account, setup Sending Identity and generate an API key
 - Configure `.env` file, make sure to get your own API keys stated below and insert it into your `.env` file
   ```
   AUDIENCE= <Auth0 Domain>
