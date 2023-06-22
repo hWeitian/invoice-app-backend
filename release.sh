@@ -1,4 +1,4 @@
-npx sequelize-cli db:drop
+# npx sequelize-cli db:drop
 npm install
 npx sequelize-cli db:drop
 npx sequelize-cli db:create
