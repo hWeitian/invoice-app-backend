@@ -50,6 +50,18 @@ async function addRate(req, res) {
   }
 }
 
+async function updateRate(req, res) {
+  const data = req.body;
+  const { id } = req.params;
+
+  try {
+    const updatedRate = await ExchangeRate.update(data, { where: { id: id } });
+    return res.json(updatedRate);
+  } catch (e) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 async function addRatesAutomatically(req, res) {
   try {
     const rateData = await axios.get(
@@ -81,4 +93,5 @@ module.exports = {
   getOneLatest,
   getTableData,
   addRate,
+  updateRate,
 };
