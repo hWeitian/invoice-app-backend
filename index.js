@@ -28,7 +28,14 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 // Enable CORS access to this server
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3001",
+      "https://invoice-frontend-wiay.onrender.com",
+    ],
+  })
+);
 
 // Auth0 authorization
 app.use(checkJwt);
