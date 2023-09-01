@@ -14,7 +14,8 @@ router.get(
 router.get("/search/id/:searchText/:page/:size", insertionOrders.searchIoById);
 
 // Insert an empty row to get insertion order number
-router.post("/", insertionOrders.insertEmptyRow);
+// router.post("/", insertionOrders.insertEmptyRow);
+router.get("/latest", insertionOrders.getLatestIoNum);
 
 // Update a record
 router.put("/:id", insertionOrders.updateRow);

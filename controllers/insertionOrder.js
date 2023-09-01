@@ -12,6 +12,18 @@ async function getAll(req, res) {
   }
 }
 
+async function getLatestIoNum(req, res) {
+  try {
+    const latestInvoiceNum = await InsertionOrder.findAll({
+      limit: 1,
+      order: [["id", "DESC"]],
+    });
+    return res.json(latestInvoiceNum);
+  } catch (e) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 async function insertEmptyRow(req, res) {
   const data = req.body;
   try {
@@ -177,4 +189,5 @@ module.exports = {
   updateStatus,
   searchIoByCopmpany,
   searchIoById,
+  getLatestIoNum,
 };
