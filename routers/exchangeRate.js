@@ -9,5 +9,6 @@ router.get("/latest", exchangeRates.getOneLatest);
 router.get("/:page/:size", exchangeRates.getTableData);
 router.post("/", exchangeRates.addRate);
 router.put("/:id", exchangeRates.updateRate);
+router.delete("/:id", exchangeRates.deleteRate);
 
 module.exports = router;

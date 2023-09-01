@@ -62,6 +62,16 @@ async function updateRate(req, res) {
   }
 }
 
+async function deleteRate(req, res) {
+  const { id } = req.params;
+  try {
+    const deletedRate = await ExchangeRate.destroy({ where: { id: id } });
+    return res.json(deletedRate);
+  } catch (e) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 async function addRatesAutomatically(req, res) {
   try {
     const rateData = await axios.get(
@@ -94,4 +104,5 @@ module.exports = {
   getTableData,
   addRate,
   updateRate,
+  deleteRate,
 };
