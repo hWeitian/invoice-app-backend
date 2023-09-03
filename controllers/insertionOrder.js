@@ -13,7 +13,6 @@ async function getAll(req, res) {
 }
 
 async function getLatestIoNum(req, res) {
-  console.log("here at getLatestIoNum");
   try {
     const latestInvoiceNum = await InsertionOrder.findAll({
       limit: 1,
@@ -26,7 +25,6 @@ async function getLatestIoNum(req, res) {
 }
 
 async function insertEmptyRow(req, res) {
-  console.log("here at insertEmptyRow");
   const data = req.body;
   try {
     const newRow = await InsertionOrder.create(data);
@@ -77,7 +75,6 @@ async function createInsertionOrder(req, res) {
   };
   try {
     const newRow = await InsertionOrder.create(newData);
-    console.log(newRow);
     return res.json(newRow);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
