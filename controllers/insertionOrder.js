@@ -12,6 +12,18 @@ async function getAll(req, res) {
   }
 }
 
+async function getLatestIoNum(req, res) {
+  try {
+    const latestInvoiceNum = await InsertionOrder.findAll({
+      limit: 1,
+      order: [["id", "DESC"]],
+    });
+    return res.json(latestInvoiceNum);
+  } catch (e) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 async function insertEmptyRow(req, res) {
   const data = req.body;
   try {
@@ -40,6 +52,29 @@ async function updateRow(req, res) {
   };
   try {
     const newRow = await InsertionOrder.update(newData, { where: { id: id } });
+    return res.json(newRow);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+async function createInsertionOrder(req, res) {
+  const data = req.body;
+  const newData = {
+    date: data.ioDate,
+    companyId: data.companies.id,
+    contactId: data.contacts.id,
+    adminId: data.adminId,
+    discount: data.discount,
+    usdGst: data.usdGst,
+    netAmount: data.netAmount,
+    totalAmount: data.totalAmount,
+    isSigned: false,
+    isDraft: false,
+    url: data.url,
+  };
+  try {
+    const newRow = await InsertionOrder.create(newData);
     return res.json(newRow);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
@@ -177,4 +212,6 @@ module.exports = {
   updateStatus,
   searchIoByCopmpany,
   searchIoById,
+  getLatestIoNum,
+  createInsertionOrder,
 };
