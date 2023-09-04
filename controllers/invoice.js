@@ -12,6 +12,18 @@ async function getAll(req, res) {
   }
 }
 
+async function getLatestInvNum(req, res) {
+  try {
+    const latestInv = await Invoice.findAll({
+      limit: 1,
+      order: [["id", "DESC"]],
+    });
+    return res.json(latestInv);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 async function insertEmptyRow(req, res) {
   const data = req.body;
   try {
@@ -214,4 +226,5 @@ module.exports = {
   getAllFromCompany,
   searchInvoiceByCopmpany,
   searchInvoiceById,
+  getLatestInvNum,
 };
