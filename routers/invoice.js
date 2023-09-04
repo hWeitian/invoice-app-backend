@@ -5,6 +5,9 @@ const invoices = require("../controllers/invoice");
 const router = express.Router();
 
 router.get("/", invoices.getAll);
+// Get the latest inv number
+router.get("/latest-number", invoices.getLatestInvNum);
+
 router.get("/table-data/:page/:size", invoices.getTableData);
 router.get("/:companyId", invoices.getAllFromCompany);
 router.get(
