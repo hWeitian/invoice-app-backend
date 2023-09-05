@@ -1,12 +1,18 @@
-const db = require("../db/models/index");
+const { db, sequelize } = require("../db/models/index");
 const { Op } = require("sequelize");
 
 const { InsertionOrder, Order, Company, Contact, Product, Magazine } = db;
 
 async function getAll(req, res) {
   try {
-    const newInsertionOrder = await InsertionOrder.findAll();
-    return res.json(newInsertionOrder);
+    const insertionOrders = await sequelize.query(
+      `SELECT io.id as "Insertion Order Number", io.date as "Date", c.name as "Company Name", c.billing_address as "Company Address", contacts.first_name || ' ' || contacts.last_name as "Contact Person", contacts.email as "Email", orders.position as "Position", products.name as "Ad Size", orders.cost as "Gross Amount", io.discount as "Discount", io.net_amount as "Net Amount", io.usd_gst as "GST in USD", io.total_amount as "Total Amount", orders.sales_note as "Sales Note", string_agg(regions.name, ',') as "Regions", orders.colour as "Colour" FROM insertion_orders as io JOIN companies as c ON c.id = io.company_id JOIN contacts ON contacts.id = io.contact_id JOIN orders ON orders.insertion_order_id = io.id LEFT JOIN products ON products.id = orders.product_id JOIN "orderRegions" ON "orderRegions".order_id = orders.id JOIN regions ON regions.id = "orderRegions".region_id GROUP BY io.id, io.date, c.name, c.billing_address, contacts.first_name, contacts.last_name, contacts.email, orders.position, products.name, orders.cost, io.discount, io.net_amount, io.usd_gst, io.total_amount, orders.sales_note, orders.colour;`,
+      {
+        model: InsertionOrder,
+        mapToModel: true, // pass true here if you have any mapped fields
+      }
+    );
+    return res.json(insertionOrders);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }

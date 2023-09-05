@@ -127,4 +127,4 @@ db.CreditItem.belongsTo(db.CreditNote);
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+module.exports = { db, sequelize };

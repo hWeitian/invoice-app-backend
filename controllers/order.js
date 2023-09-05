@@ -1,4 +1,4 @@
-const db = require("../db/models/index");
+const { db } = require("../db/models/index");
 const { Op } = require("sequelize");
 
 const { Order, orderRegion, Region, Invoice, Company, Product, Payment } = db;
@@ -105,6 +105,9 @@ async function addOrUpdate(req, res) {
   let dataToCreate = [];
   let newDataToCreate = [];
   let idToUpdate = [];
+  let idToUpdateData = [];
+
+  // console.log(data);
 
   // Separate the invoiceItems into 2 categories
   // idToUpdate are items that already exist in the database
@@ -112,10 +115,13 @@ async function addOrUpdate(req, res) {
   data.invoiceItems.forEach((item) => {
     if (item.id !== "") {
       idToUpdate.push(item.id);
+      idToUpdateData.push(item);
     } else {
       dataToCreate.push(item);
     }
   });
+
+  // console.log(dataToCreate);
 
   // If there are new items to be added to the database,
   // create each row according to the fields
@@ -143,13 +149,16 @@ async function addOrUpdate(req, res) {
       const toUpdate = await Order.findAll({ where: { id: idToUpdate } });
       const dataToUpdate = toUpdate.map((item) => item.dataValues);
 
-      const updatedData = dataToUpdate.map((item) => {
+      const updatedData = dataToUpdate.map((item, index) => {
         item.invoiceId = data.invoiceNum;
+        if (item.id === idToUpdateData[index].id) {
+          item.invDescription = idToUpdateData[index].description;
+        }
         return item;
       });
 
       await Order.bulkCreate(updatedData, {
-        updateOnDuplicate: ["invoiceId"],
+        updateOnDuplicate: ["invoiceId", "invDescription"],
         where: { id: ["id"] },
       });
     }

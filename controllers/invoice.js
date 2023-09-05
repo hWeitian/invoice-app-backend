@@ -1,12 +1,18 @@
-const db = require("../db/models/index");
+const { db, sequelize } = require("../db/models/index");
 const { Op } = require("sequelize");
 
-const { Invoice, Company, InvoicePayment, Payment } = db;
+const { Invoice, Company, InvoicePayment, Payment, ExchangeRate } = db;
 
 async function getAll(req, res) {
   try {
-    const newInvoice = await Invoice.findAll();
-    return res.json(newInvoice);
+    const invoices = await sequelize.query(
+      `SELECT inv.id as "Invoice Number", inv.invoice_date as "Invoice Date", c.name as "Company Name", magazines.month || ' ' || magazines.year as "Issue", orders.inv_description as "Item Description", orders.insertion_order_id as "Insertion Order", inv.discount as "Discount", inv.total_amount as "Sub Total", inv.usd_gst as "GST in USD", inv.net_amount as "Total Amount", inv.due_date as "Due Date", inv.amount_paid as "Amount Paid", inv.purchase_order as "Purchase Order", inv.url as "Link", inv.sgd_gst as "GST in SGD", rates.rate as "Exchange Rate", payments.payee as "Payee", payments.amount as "Paid Amount", inv.created_at as "Created At", inv.updated_at as "Updated At" FROM invoices as "inv" JOIN exchange_rates as rates ON rates.id = inv.exchange_rate_id JOIN companies as c ON c.id = inv.company_id JOIN orders on orders.invoice_id = inv.id LEFT JOIN "invoicePayments" ON "invoicePayments".invoice_id = inv.id LEFT JOIN payments ON payments.id = "invoicePayments".payment_id LEFT JOIN magazines ON magazines.id = orders.magazine_id;`,
+      {
+        model: Invoice,
+        mapToModel: true, // pass true here if you have any mapped fields
+      }
+    );
+    return res.json(invoices);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }

@@ -1,4 +1,4 @@
-const db = require("../db/models/index");
+const { db } = require("../db/models/index");
 const axios = require("axios");
 const CronJob = require("cron").CronJob;
 
