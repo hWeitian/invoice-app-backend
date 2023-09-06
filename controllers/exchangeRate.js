@@ -13,6 +13,39 @@ async function getAll(req, res) {
   }
 }
 
+async function getRate(req, res) {
+  const { month, year } = req.params;
+  const [newMonth, newYear] = convertDate(month, year);
+  const monthFormat =
+    newMonth.length === 1 ? "0" + newMonth.toString() : newMonth;
+  const date = [
+    `${newYear}-${monthFormat}-30`,
+    `${newYear}-${monthFormat}-31`,
+    `${newYear}-${monthFormat}-28`,
+  ];
+  try {
+    const newExchangeRate = await ExchangeRate.findOne({
+      where: { date: date },
+    });
+    return res.json(newExchangeRate);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+const convertDate = (month, year) => {
+  let newMonth;
+  let newYear;
+  if (+month === 1) {
+    newMonth = 12;
+    newYear = year - 1;
+  } else {
+    newMonth = month - 1;
+    newYear = year;
+  }
+  return [newMonth, newYear];
+};
+
 async function getOneLatest(req, res) {
   try {
     const newExchangeRate = await ExchangeRate.findOne({
@@ -31,7 +64,7 @@ async function getTableData(req, res) {
       limit: size,
       offset: page * size,
       distinct: true,
-      order: [["createdAt", "DESC"]],
+      order: [["date", "DESC"]],
     });
     return res.json(tableData);
   } catch (e) {
@@ -105,4 +138,5 @@ module.exports = {
   addRate,
   updateRate,
   deleteRate,
+  getRate,
 };
