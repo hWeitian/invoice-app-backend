@@ -31,7 +31,7 @@ async function getTableData(req, res) {
       limit: size,
       offset: page * size,
       distinct: true,
-      order: [["createdAt", "DESC"]],
+      order: [["id", "DESC"]],
     });
     return res.json(tableData);
   } catch (e) {
