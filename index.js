@@ -30,10 +30,10 @@ const app = express();
 // Enable CORS access to this server
 app.use(
   cors({
-    origin: [
-      "http://localhost:3001",
-      "https://invoice-frontend-wiay.onrender.com",
-    ],
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.DOMAIN
+        : process.env.LOCAL_HOST,
   })
 );
 
