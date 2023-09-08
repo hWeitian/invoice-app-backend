@@ -272,6 +272,21 @@ async function getDataforPagination(req, res) {
   }
 }
 
+async function updateOrder(req, res) {
+  const { orderId, newMagId } = req.params;
+  try {
+    const updatedOrder = await Order.update(
+      { magazineId: newMagId },
+      {
+        where: { id: orderId },
+      }
+    );
+    return res.json(updatedOrder);
+  } catch (e) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 function splitRegions(regions) {
   return regions.split("&");
 }
@@ -282,4 +297,5 @@ module.exports = {
   addOrUpdate,
   getDataforPagination,
   getDataForOverview,
+  updateOrder,
 };

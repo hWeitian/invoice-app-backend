@@ -9,5 +9,6 @@ router.get("/magazine/:id", orders.getDataForOverview);
 router.get("/magazine/:id/:regions/:page/:size", orders.getDataforPagination);
 router.post("/", orders.addOrders);
 router.put("/", orders.addOrUpdate);
+router.put("/:orderId/:newMagId", orders.updateOrder);
 
 module.exports = router;
