@@ -1,7 +1,7 @@
 const { db } = require("../db/models/index");
 const axios = require("axios");
 const CronJob = require("cron").CronJob;
-
+const { scrapeRates } = require("../utils/scrapeExchangeRates");
 const { ExchangeRate } = db;
 
 async function getAll(req, res) {
@@ -107,13 +107,21 @@ async function deleteRate(req, res) {
 
 async function addRatesAutomatically(req, res) {
   try {
-    const rateData = await axios.get(
-      "https://eservices.mas.gov.sg/api/action/datastore/search.json?resource_id=95932927-c8bc-4e7a-b484-68a66a24edfe&limit=1&fields=usd_sgd,end_of_day&sort=end_of_day%20desc"
-    );
+    // MAS discountinued the base url for exchange rate API
+    // const rateData = await axios.get(
+    //   "https://eservices.mas.gov.sg/api/action/datastore/search.json?resource_id=95932927-c8bc-4e7a-b484-68a66a24edfe&limit=1&fields=usd_sgd,end_of_day&sort=end_of_day%20desc"
+    // );
+
+    const rateData = await scrapeRates("2023", "2023", "Aug", "Aug", "Monthly");
+
     const newRate = {
       date: new Date(rateData.data.result.records[0]["end_of_day"]),
-      rate: rateData.data.result.records[0]["usd_sgd"],
+      rate: rateData,
     };
+    // const newRate = {
+    //   date: new Date(rateData.data.result.records[0]["end_of_day"]),
+    //   rate: rateData.data.result.records[0]["usd_sgd"],
+    // };
 
     const addedRate = await ExchangeRate.create(newRate);
   } catch (err) {
