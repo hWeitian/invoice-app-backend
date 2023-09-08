@@ -14,6 +14,17 @@ async function getAll(req, res) {
   }
 }
 
+async function getRecent(req, res) {
+  try {
+    const newMagazine = await Magazine.findAll({
+      order: [["id", "DESC"]],
+    });
+    return res.json(newMagazine);
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 async function getPaginatedData(req, res) {
   const { page, size } = req.params;
   try {
