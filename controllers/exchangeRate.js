@@ -74,8 +74,6 @@ async function getTableData(req, res) {
 
 async function addRate(req, res) {
   const data = req.body;
-  console.log("In add rate");
-  console.log(data);
 
   try {
     const newRate = await ExchangeRate.create(data);
@@ -88,9 +86,6 @@ async function addRate(req, res) {
 async function updateRate(req, res) {
   const data = req.body;
   const { id } = req.params;
-
-  console.log("In update rate");
-  console.log(data);
 
   try {
     const updatedRate = await ExchangeRate.update(data, { where: { id: id } });
