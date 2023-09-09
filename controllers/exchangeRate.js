@@ -107,14 +107,27 @@ async function deleteRate(req, res) {
 
 async function addRatesAutomatically(req, res) {
   try {
-    // MAS discountinued the base url for exchange rate API
-    // const rateData = await axios.get(
-    //   "https://eservices.mas.gov.sg/api/action/datastore/search.json?resource_id=95932927-c8bc-4e7a-b484-68a66a24edfe&limit=1&fields=usd_sgd,end_of_day&sort=end_of_day%20desc"
-    // );
+    const monthMap = {
+      0: "Jan",
+      1: "Feb",
+      2: "Mar",
+      3: "Apr",
+      4: "May",
+      5: "Jun",
+      6: "Jul",
+      7: "Aug",
+      8: "Sep",
+      9: "Oct",
+      10: "Nov",
+      11: "Dec",
+    };
 
     const yesterday = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24);
 
-    const rateData = await scrapeRates("2023", "2023", "Aug", "Aug", "Monthly");
+    const year = yesterday.getFullYear();
+    const month = monthMap[yesterday.getMonth()];
+
+    const rateData = await scrapeRates(year, year, month, month, "Monthly");
 
     const newRate = {
       date: yesterday,
@@ -128,8 +141,8 @@ async function addRatesAutomatically(req, res) {
 }
 
 const getRates = new CronJob(
-  "*/1 * * * *",
-  // "00 01 00 * * *",
+  // At 00:01 on first day of each month
+  "01 0 1 * *",
   function () {
     addRatesAutomatically();
   },
