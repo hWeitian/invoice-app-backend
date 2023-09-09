@@ -112,16 +112,14 @@ async function addRatesAutomatically(req, res) {
     //   "https://eservices.mas.gov.sg/api/action/datastore/search.json?resource_id=95932927-c8bc-4e7a-b484-68a66a24edfe&limit=1&fields=usd_sgd,end_of_day&sort=end_of_day%20desc"
     // );
 
+    const yesterday = new Date(new Date().valueOf() - 1000 * 60 * 60 * 24);
+
     const rateData = await scrapeRates("2023", "2023", "Aug", "Aug", "Monthly");
 
     const newRate = {
-      date: new Date(rateData.data.result.records[0]["end_of_day"]),
+      date: yesterday,
       rate: rateData,
     };
-    // const newRate = {
-    //   date: new Date(rateData.data.result.records[0]["end_of_day"]),
-    //   rate: rateData.data.result.records[0]["usd_sgd"],
-    // };
 
     const addedRate = await ExchangeRate.create(newRate);
   } catch (err) {
@@ -130,7 +128,8 @@ async function addRatesAutomatically(req, res) {
 }
 
 const getRates = new CronJob(
-  "00 01 00 * * *",
+  "*/1 * * * *",
+  // "00 01 00 * * *",
   function () {
     addRatesAutomatically();
   },
