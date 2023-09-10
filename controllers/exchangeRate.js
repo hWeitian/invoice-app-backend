@@ -127,7 +127,8 @@ async function addRatesAutomatically(req, res) {
     const year = yesterday.getFullYear();
     const month = monthMap[yesterday.getMonth()];
 
-    const rateData = await scrapeRates(year, year, month, month, "Monthly");
+    const rateData = await scrapeRates("2023", "2023", "Aug", "Aug", "Monthly");
+    // const rateData = await scrapeRates(year, year, month, month, "Monthly");
 
     const newRate = {
       date: yesterday,
@@ -142,7 +143,8 @@ async function addRatesAutomatically(req, res) {
 
 const getRates = new CronJob(
   // At 00:01 on first day of each month
-  "01 0 1 * *",
+  "*/5 * * * *",
+  // "01 0 1 * *",
   function () {
     addRatesAutomatically();
   },
