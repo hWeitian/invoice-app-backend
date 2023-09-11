@@ -37,6 +37,19 @@ app.use(
   })
 );
 
+// Get the ip address of the request
+// app.get("/", function (req, res) {
+//   console.log("here");
+//   const ip =
+//     req.headers["cf-connecting-ip"] ||
+//     req.headers["x-real-ip"] ||
+//     req.headers["x-forwarded-for"] ||
+//     req.socket.remoteAddress ||
+//     "";
+//   console.log(ip);
+//   return express.response.json({ ip });
+// });
+
 // Auth0 authorization
 app.use(checkJwt);
 
