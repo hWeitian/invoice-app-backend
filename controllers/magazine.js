@@ -142,6 +142,8 @@ async function getCurrentIssue(req, res) {
 
 async function addIssue(req, res) {
   const newData = req.body;
+  console.log("At magazine addIssue");
+  console.log(newData);
   try {
     const newMagazine = await Magazine.create(newData);
     return res.json(newMagazine);
@@ -153,6 +155,8 @@ async function addIssue(req, res) {
 async function updateIssue(req, res) {
   const { id } = req.params;
   const newData = req.body;
+  console.log("At magazine updateIssue");
+  console.log(newData);
   try {
     const updatedMagazine = await Magazine.update(newData, {
       where: { id: id },

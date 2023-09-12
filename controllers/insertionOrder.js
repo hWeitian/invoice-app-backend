@@ -31,6 +31,7 @@ async function getLatestIoNum(req, res) {
 }
 
 async function insertEmptyRow(req, res) {
+  console.log("At insert empty Row");
   const data = req.body;
   try {
     const newRow = await InsertionOrder.create(data);
@@ -41,8 +42,10 @@ async function insertEmptyRow(req, res) {
 }
 
 async function updateRow(req, res) {
+  console.log("At update Row");
   const { id } = req.params;
   const data = req.body;
+  console.log(data);
   const newData = {
     date: data.ioDate,
     companyId: data.companies.id,
@@ -65,6 +68,7 @@ async function updateRow(req, res) {
 }
 
 async function createInsertionOrder(req, res) {
+  console.log("At create insertion Row");
   const data = req.body;
   const newData = {
     date: data.ioDate,
