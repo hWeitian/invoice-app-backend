@@ -21,7 +21,7 @@ Backend for [invoiceGenie](https://github.com/hWeitian/invoice-app-frontend)
   DB_DIALECT=postgres
   PORT=3000
   AUDIENCE= <Auth0 Domain>
-  AUTH_CLIENTID= <Auth0 client id>
+  AUTH_CLIENTID= <Auth0 Machine to Machine client id>
   AUTH_CONNECTION= <Auth0 database name>
   AUTH_CONNECTION_ID= <Auth0 Authentication database identifier>
   AUTH_DOMAIN= <Auth0 API domain>
