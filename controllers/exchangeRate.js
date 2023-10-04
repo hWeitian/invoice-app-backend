@@ -142,7 +142,8 @@ async function addRatesAutomatically(req, res) {
 
 const getRates = new CronJob(
   // At 00:01 on first day of each month
-  "01 0 1 * *",
+  // "01 0 1 * *",
+  "*/1 * * * *",
   function () {
     addRatesAutomatically();
   },
