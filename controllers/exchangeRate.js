@@ -127,7 +127,8 @@ async function addRatesAutomatically(req, res) {
     const year = yesterday.getFullYear();
     const month = monthMap[yesterday.getMonth()];
 
-    const rateData = await scrapeRates(year, year, month, month, "Monthly");
+    const rateData = await scrapeRates(2023, 2023, "Sep", "Sep", "Monthly");
+    // const rateData = await scrapeRates(year, year, month, month, "Monthly");
 
     const newRate = {
       date: yesterday,
