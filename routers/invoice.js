@@ -18,5 +18,6 @@ router.get("/search/id/:searchText/:page/:size", invoices.searchInvoiceById);
 
 router.post("/add-empty", invoices.insertEmptyRow);
 router.put("/:id", invoices.updateRow);
+router.delete("/:invoiceId", invoices.deleteInvoice);
 
 module.exports = router;
