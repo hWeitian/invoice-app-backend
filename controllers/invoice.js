@@ -1,7 +1,8 @@
+const { raw } = require("express");
 const { db, sequelize } = require("../db/models/index");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 
-const { Invoice, Company, InvoicePayment, Payment, ExchangeRate } = db;
+const { Invoice, Company, InvoicePayment, Payment, ExchangeRate, Order } = db;
 
 async function getAll(req, res) {
   try {
@@ -224,6 +225,88 @@ async function searchInvoiceById(req, res) {
   }
 }
 
+async function deleteInvoice(req, res) {
+  const { invoiceId } = req.params;
+  try {
+    let orderInSelectedInvoiceWithIO = {};
+    let updateOrderPromise;
+    let deleteOrderPromise;
+
+    const ordersIdInSelectedInvoiceWithoutIO = [];
+    const id = invoiceId.split(".")[0];
+
+    const ordersInSelectedInvoice = await Order.findAll({
+      where: { invoiceId: id },
+      raw: true,
+    });
+
+    // Split orders in invoice into orders related to an insertion order or orders not related to an insertion order
+    ordersInSelectedInvoice.forEach((order) => {
+      if (order.insertionOrderId != null) {
+        order.invoiceId = null;
+        orderInSelectedInvoiceWithIO = order;
+      } else {
+        ordersIdInSelectedInvoiceWithoutIO.push(order.id);
+      }
+    });
+
+    // Orders related to an IO will be updated (invoice number will be set to null)
+    if (Object.keys(orderInSelectedInvoiceWithIO).length > 0) {
+      updateOrderPromise = updateOrder(
+        orderInSelectedInvoiceWithIO,
+        orderInSelectedInvoiceWithIO.id
+      );
+    }
+
+    // Orders not related to an IO will be deleted
+    if (ordersIdInSelectedInvoiceWithoutIO.length > 0) {
+      deleteOrderPromise = deleteOrder(ordersIdInSelectedInvoiceWithoutIO);
+    }
+
+    // Run all promises together
+    await Promise.all([updateOrderPromise, deleteOrderPromise]);
+
+    // Delete invoice
+    await Invoice.destroy({
+      where: {
+        id: id,
+      },
+    });
+
+    // Foreign key constrain in Orders table
+    return res.status(200).json({ msg: "Delete Successful" });
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+/**
+ * Update an order by replacing it with a new order oject
+ * @async
+ * @param {object} newOrderObject new order object
+ * @param {number} orderId ID of the order to be updated
+ * @returns {promise}
+ */
+async function updateOrder(newOrderObject, orderId) {
+  return Order.update(newOrderObject, {
+    where: {
+      id: orderId,
+    },
+  });
+}
+
+/**
+ * Delete an order
+ * @async
+ * @param {array} orderId An array of the order IDs to be deleted
+ * @returns {promise}
+ */
+async function deleteOrder(orderId) {
+  return Order.destroy({
+    where: { id: orderId },
+  });
+}
+
 module.exports = {
   getAll,
   insertEmptyRow,
@@ -233,4 +316,5 @@ module.exports = {
   searchInvoiceByCopmpany,
   searchInvoiceById,
   getLatestInvNum,
+  deleteInvoice,
 };
