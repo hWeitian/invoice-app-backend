@@ -21,12 +21,23 @@ async function getAll(req, res) {
 
 async function getLatestIoNum(req, res) {
   try {
-    const latestInvoiceNum = await InsertionOrder.findAll({
+    const latestIoNum = await getLatestIoInternal();
+    return res.status(200).json(latestIoNum);
+  } catch (e) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
+async function getLatestIoInternal() {
+  try {
+    const latestIo = InsertionOrder.findAll({
       limit: 1,
       order: [["id", "DESC"]],
+      raw: true,
     });
-    return res.json(latestInvoiceNum);
-  } catch (e) {
+    return latestIo;
+  } catch (err) {
+    console.log(err);
     return res.status(400).json({ error: true, msg: err });
   }
 }
@@ -34,6 +45,8 @@ async function getLatestIoNum(req, res) {
 async function insertEmptyRow(req, res) {
   const data = req.body;
   try {
+    const latestInsertionOrder = await getLatestIoInternal();
+    data.id = latestInsertionOrder[0].id + 1;
     const newRow = await InsertionOrder.create(data);
     return res.json(newRow);
   } catch (err) {
