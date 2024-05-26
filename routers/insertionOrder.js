@@ -26,5 +26,6 @@ router.put("/status/:id", insertionOrders.updateStatus);
 
 //Create an insertion order
 router.post("/", insertionOrders.createInsertionOrder);
+router.delete("/:insertionOrderId", insertionOrders.deleteIO);
 
 module.exports = router;
