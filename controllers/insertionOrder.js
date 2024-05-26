@@ -1,5 +1,6 @@
 const { db, sequelize } = require("../db/models/index");
 const { Op } = require("sequelize");
+const { deleteOrderByInsertionOrder } = require("../controllers/order");
 
 const { InsertionOrder, Order, Company, Contact, Product, Magazine } = db;
 
@@ -180,8 +181,6 @@ async function searchIoByCopmpany(req, res) {
     } else {
       return res.json(insertionOrders);
     }
-
-    return res.json(insertionOrders);
   } catch (err) {
     return res.status(400).json({ error: true, msg: err });
   }
@@ -209,6 +208,26 @@ async function searchIoById(req, res) {
   }
 }
 
+async function deleteIO(req, res) {
+  const { insertionOrderId } = req.params;
+
+  try {
+    const id = insertionOrderId.split("-")[1];
+
+    // Delete orders that contains the InsertionOrder ID
+    await deleteOrderByInsertionOrder(id);
+
+    // Delete the insertion order that contains that Insertion Order ID
+    await InsertionOrder.destroy({
+      where: { id: id },
+    });
+
+    res.status(200).json({ msg: "Delete Successful" });
+  } catch (err) {
+    return res.status(400).json({ error: true, msg: err });
+  }
+}
+
 module.exports = {
   getAll,
   insertEmptyRow,
@@ -220,4 +239,5 @@ module.exports = {
   searchIoById,
   getLatestIoNum,
   createInsertionOrder,
+  deleteIO,
 };

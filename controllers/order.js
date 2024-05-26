@@ -291,6 +291,18 @@ function splitRegions(regions) {
   return regions.split("&");
 }
 
+/**
+ * Delete an order
+ * @async
+ * @param {array} insertionOrderId An array of the order IDs to be deleted
+ * @returns {promise}
+ */
+async function deleteOrderByInsertionOrder(insertionOrderId) {
+  return Order.destroy({
+    where: { insertionOrderId: insertionOrderId },
+  });
+}
+
 module.exports = {
   getAll,
   addOrders,
@@ -298,4 +310,5 @@ module.exports = {
   getDataforPagination,
   getDataForOverview,
   updateOrder,
+  deleteOrderByInsertionOrder,
 };
