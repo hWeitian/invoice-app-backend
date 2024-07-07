@@ -62,6 +62,14 @@ const initInsertionOrder = (sequelize) =>
       url: {
         type: DataTypes.STRING,
       },
+      gstRateId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "gst_rates",
+          key: "id",
+        },
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

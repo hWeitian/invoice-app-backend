@@ -18,6 +18,7 @@ const initOrder = require("./order");
 const initCreditNote = require("./credit_note");
 const initCreditItem = require("./credit_item");
 const initOrderRegion = require("./orderRegion");
+const initGstRate = require("./gst_rate");
 // const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../../config/database.js")[env];
@@ -49,6 +50,7 @@ db.Order = initOrder(sequelize);
 db.CreditNote = initCreditNote(sequelize);
 db.CreditItem = initCreditItem(sequelize);
 db.orderRegion = initOrderRegion(sequelize);
+db.GstRate = initGstRate(sequelize);
 
 // One to many relationship between companies and contacts
 // One company has many contacts
@@ -65,6 +67,15 @@ db.InsertionOrder.belongsTo(db.Company);
 db.Contact.hasMany(db.InsertionOrder);
 db.InsertionOrder.belongsTo(db.Contact);
 
+// One to many relation between gst rates and insertionOrders
+// One gst rate has many insertion orders
+db.GstRate.hasMany(db.InsertionOrder);
+db.InsertionOrder.belongsTo(db.GstRate, {
+  foreignKey: "gstRateId",
+  onUpdate: "CASCADE",
+  onDelete: "SET NULL",
+});
+
 // One to many relation between companies and invoices
 // One company has many invoices
 db.Company.hasMany(db.Invoice);
@@ -79,6 +90,15 @@ db.Invoice.belongsTo(db.Contact);
 // One exchange rate has many invoices
 db.ExchangeRate.hasMany(db.Invoice);
 db.Invoice.belongsTo(db.ExchangeRate);
+
+// One to many relation between gst rates and invoices
+// One gst rate has many invoices
+db.GstRate.hasMany(db.Invoice);
+db.Invoice.belongsTo(db.GstRate, {
+  foreignKey: "gstRateId",
+  onUpdate: "CASCADE",
+  onDelete: "SET NULL",
+});
 
 // Many to many relation between invoices and payments
 // Once invoice has many payments and one payment can be for multiple invoices

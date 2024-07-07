@@ -118,7 +118,7 @@ async function getTableData(req, res) {
     });
     return res.json(tableData);
   } catch (e) {
-    return res.status(400).json({ error: true, msg: err });
+    return res.status(400).json({ error: true, msg: e.message });
   }
 }
 
