@@ -22,6 +22,7 @@ const orderRouter = require("./routers/order");
 const creditNoteRouter = require("./routers/creditNote");
 const creditItemRouter = require("./routers/creditItem");
 const orderRegionRouter = require("./routers/orderRegion");
+const gstRateRouter = require("./routers/gstRate");
 
 const PORT = process.env.PORT || 3000;
 
@@ -70,6 +71,7 @@ app.use("/orders", orderRouter);
 app.use("/credit-notes", creditNoteRouter);
 app.use("/credit-items", creditItemRouter);
 app.use("/order-regions", orderRegionRouter);
+app.use("/gst-rate", gstRateRouter);
 
 app.listen(PORT, () => {
   console.log("Application listening to port 3000");
