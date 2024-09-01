@@ -14,9 +14,6 @@ async function updateGstRate(req, res) {
   const data = req.body;
   const { id } = req.params;
 
-  console.log(data);
-  console.log(id);
-
   try {
     const updatedRate = await GstRate.update(data, { where: { id: id } });
     return res.json(updatedRate);
