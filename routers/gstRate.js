@@ -5,5 +5,6 @@ const gstRates = require("../controllers/gstRate");
 const router = express.Router();
 
 router.get("/", gstRates.getAll);
+router.put("/:id", gstRates.updateGstRate);
 
 module.exports = router;
