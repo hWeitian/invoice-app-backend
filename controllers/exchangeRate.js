@@ -29,10 +29,10 @@ async function getRate(req, res) {
   try {
     const newExchangeRate = await ExchangeRate.findOne({
       where: { date: { [Op.between]: [start, end] } },
+      order: [["date", "DESC"]],
     });
     return res.json(newExchangeRate);
   } catch (err) {
-    console.log(`error: ${err}`);
     return res.status(400).json({ error: true, msg: err });
   }
 }
