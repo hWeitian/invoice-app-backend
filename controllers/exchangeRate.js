@@ -3,6 +3,7 @@ const axios = require("axios");
 const CronJob = require("cron").CronJob;
 const { scrapeRates } = require("../utils/scrapeExchangeRates");
 const { ExchangeRate } = db;
+const { Op } = require("sequelize");
 
 async function getAll(req, res) {
   try {
@@ -15,20 +16,23 @@ async function getAll(req, res) {
 
 async function getRate(req, res) {
   const { month, year } = req.params;
-  const [newMonth, newYear] = convertDate(month, year);
-  const monthFormat =
-    newMonth.length === 1 ? "0" + newMonth.toString() : newMonth;
-  const date = [
-    `${newYear}-${monthFormat}-30`,
-    `${newYear}-${monthFormat}-31`,
-    `${newYear}-${monthFormat}-28`,
-  ];
+  const [targetMonth, targetYear] = convertDate(month, year);
+  const targetMonthTwoDigits = String(targetMonth).padStart(2, "0");
+  const start = `${targetYear}-${targetMonthTwoDigits}-01`;
+  const lastDay = new Date(
+    Number(targetYear),
+    Number(targetMonth),
+    0
+  ).getDate();
+  const end = `${targetYear}-${targetMonthTwoDigits}-${lastDay}`;
+
   try {
     const newExchangeRate = await ExchangeRate.findOne({
-      where: { date: date },
+      where: { date: { [Op.between]: [start, end] } },
     });
     return res.json(newExchangeRate);
   } catch (err) {
+    console.log(`error: ${err}`);
     return res.status(400).json({ error: true, msg: err });
   }
 }
